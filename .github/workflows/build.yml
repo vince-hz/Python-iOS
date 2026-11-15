@@ -1,34 +1,38 @@
-name: Build
+name: Build Python 3.11
 
 on:
-  push:
-    branches: [ kivy-ios ]
-  pull_request:
-    branches: [ kivy-ios ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: python-ios-build
+  cancel-in-progress: false
 
 jobs:
   build:
-
-    runs-on: macos-latest
-
+    runs-on: macos-15
+    timeout-minutes: 120
     steps:
-    - uses: actions/checkout@v2
-    - run: python --version
-    - uses: actions/setup-python@v2
-      with:
-        python-version: '3.9'
-    - run: python --version
-    - run: sh Scripts/ci.sh
-      id: script
-    - name: Commit
-      uses: EndBug/add-and-commit@v7
-      with:
-        add: 'Package.swift Sources'
-        message: "add ${{ steps.script.outputs.tag }}"
-    - name: Release
-      uses: "marvinpinto/action-automatic-releases@latest"
-      with:
-        repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: "${{ steps.script.outputs.tag }}"
-        files: 'kivy-ios/*.xcframework.zip'
-        prerelease: false
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: brew install autoconf automake libtool pkg-config
+      - run: sh Scripts/ci.sh 3.11.18-1
+      - name: Run simulator smoke test
+        run: |
+          DEVICE=$(xcrun simctl list devices available -j | python3 -c 'import json,sys; devices=json.load(sys.stdin)["devices"]; print(next(d["udid"] for key, group in devices.items() if "iOS" in key for d in group if d["name"].startswith("iPhone")))')
+          xcrun simctl boot "$DEVICE"
+          xcrun simctl bootstatus "$DEVICE" -b
+          sh Scripts/smoke-test.sh "$DEVICE"
+      - run: tar -czf artifacts/PythonSupport.tar.gz Sources/PythonSupport/lib
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Python-3.11.18
+          path: |
+            artifacts/*.zip
+            artifacts/PythonSupport.tar.gz
+            Package.swift
+          if-no-files-found: error

@@ -59,9 +59,9 @@ extern PyObject* PyInit__struct(void);
 extern PyObject* PyInit_array(void);
 extern PyObject* PyInit_audioop(void);
 extern PyObject* PyInit_binascii(void);
-extern PyObject* PyInit_cmath(void);
 extern PyObject* PyInit_fcntl(void);
 extern PyObject* PyInit_grp(void);
+extern PyObject* PyInit_cmath(void);
 extern PyObject* PyInit_math(void);
 extern PyObject* PyInit_mmap(void);
 extern PyObject* PyInit_pyexpat(void);
@@ -76,27 +76,27 @@ extern PyObject* PyInit__testbuffer(void);
 extern PyObject* PyInit__testinternalcapi(void);
 extern PyObject* PyInit__testimportmultiple(void);
 extern PyObject* PyInit__ctypes(void);
-extern PyObject* PyInit_posix(void);
-extern PyObject* PyInit_errno(void);
-extern PyObject* PyInit_pwd(void);
-extern PyObject* PyInit__sre(void);
-extern PyObject* PyInit__codecs(void);
-extern PyObject* PyInit__weakref(void);
-extern PyObject* PyInit__functools(void);
-extern PyObject* PyInit__operator(void);
-extern PyObject* PyInit__collections(void);
-extern PyObject* PyInit__abc(void);
-extern PyObject* PyInit_itertools(void);
 extern PyObject* PyInit_atexit(void);
-extern PyObject* PyInit__signal(void);
-extern PyObject* PyInit__stat(void);
-extern PyObject* PyInit_time(void);
-extern PyObject* PyInit__thread(void);
-extern PyObject* PyInit__locale(void);
-extern PyObject* PyInit__io(void);
 extern PyObject* PyInit_faulthandler(void);
+extern PyObject* PyInit_posix(void);
+extern PyObject* PyInit__signal(void);
 extern PyObject* PyInit__tracemalloc(void);
+extern PyObject* PyInit__codecs(void);
+extern PyObject* PyInit__collections(void);
+extern PyObject* PyInit_errno(void);
+extern PyObject* PyInit__io(void);
+extern PyObject* PyInit_itertools(void);
+extern PyObject* PyInit__sre(void);
+extern PyObject* PyInit__thread(void);
+extern PyObject* PyInit_time(void);
+extern PyObject* PyInit__weakref(void);
+extern PyObject* PyInit__abc(void);
+extern PyObject* PyInit__functools(void);
+extern PyObject* PyInit__locale(void);
+extern PyObject* PyInit__operator(void);
+extern PyObject* PyInit__stat(void);
 extern PyObject* PyInit__symtable(void);
+extern PyObject* PyInit_pwd(void);
 extern PyObject* PyInit_xxsubtype(void);
 
 /* -- ADDMODULE MARKER 1 -- */
@@ -105,6 +105,7 @@ extern PyObject* PyMarshal_Init(void);
 extern PyObject* PyInit__imp(void);
 extern PyObject* PyInit_gc(void);
 extern PyObject* PyInit__ast(void);
+extern PyObject* PyInit__tokenize(void);
 extern PyObject* _PyWarnings_Init(void);
 extern PyObject* PyInit__string(void);
 
@@ -146,9 +147,9 @@ struct _inittab _PyImport_Inittab[] = {
     {"array", PyInit_array},
     {"audioop", PyInit_audioop},
     {"binascii", PyInit_binascii},
-    {"cmath", PyInit_cmath},
     {"fcntl", PyInit_fcntl},
     {"grp", PyInit_grp},
+    {"cmath", PyInit_cmath},
     {"math", PyInit_math},
     {"mmap", PyInit_mmap},
     {"pyexpat", PyInit_pyexpat},
@@ -163,27 +164,27 @@ struct _inittab _PyImport_Inittab[] = {
     {"_testinternalcapi", PyInit__testinternalcapi},
     {"_testimportmultiple", PyInit__testimportmultiple},
     {"_ctypes", PyInit__ctypes},
-    {"posix", PyInit_posix},
-    {"errno", PyInit_errno},
-    {"pwd", PyInit_pwd},
-    {"_sre", PyInit__sre},
-    {"_codecs", PyInit__codecs},
-    {"_weakref", PyInit__weakref},
-    {"_functools", PyInit__functools},
-    {"_operator", PyInit__operator},
-    {"_collections", PyInit__collections},
-    {"_abc", PyInit__abc},
-    {"itertools", PyInit_itertools},
     {"atexit", PyInit_atexit},
-    {"_signal", PyInit__signal},
-    {"_stat", PyInit__stat},
-    {"time", PyInit_time},
-    {"_thread", PyInit__thread},
-    {"_locale", PyInit__locale},
-    {"_io", PyInit__io},
     {"faulthandler", PyInit_faulthandler},
+    {"posix", PyInit_posix},
+    {"_signal", PyInit__signal},
     {"_tracemalloc", PyInit__tracemalloc},
+    {"_codecs", PyInit__codecs},
+    {"_collections", PyInit__collections},
+    {"errno", PyInit_errno},
+    {"_io", PyInit__io},
+    {"itertools", PyInit_itertools},
+    {"_sre", PyInit__sre},
+    {"_thread", PyInit__thread},
+    {"time", PyInit_time},
+    {"_weakref", PyInit__weakref},
+    {"_abc", PyInit__abc},
+    {"_functools", PyInit__functools},
+    {"_locale", PyInit__locale},
+    {"_operator", PyInit__operator},
+    {"_stat", PyInit__stat},
     {"_symtable", PyInit__symtable},
+    {"pwd", PyInit_pwd},
     {"xxsubtype", PyInit_xxsubtype},
 
 /* -- ADDMODULE MARKER 2 -- */
@@ -196,6 +197,9 @@ struct _inittab _PyImport_Inittab[] = {
 
     /* This lives in Python/Python-ast.c */
     {"_ast", PyInit__ast},
+
+    /* This lives in Python/Python-tokenizer.c */
+    {"_tokenize", PyInit__tokenize},
 
     /* These entries are here for sys.builtin_module_names */
     {"builtins", NULL},

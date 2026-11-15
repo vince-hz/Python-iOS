@@ -1,9 +1,7 @@
+#!/bin/sh
+set -eu
+cd "$(dirname "$0")/.."
+TAG=${1:?Usage: ci.sh RELEASE_TAG}
 sh Scripts/toolchain.sh
-
 sh Scripts/build.sh
-
-TAG=v0.1.1-`date +b%Y%m%d-%H%M%S`
-
-sh Scripts/package.sh $TAG
-
-echo "::set-output name=tag::$TAG"
+sh Scripts/package.sh "$TAG"

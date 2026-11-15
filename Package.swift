@@ -1,10 +1,10 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.5
 
 import PackageDescription
 
 let package = Package(
     name: "Python-iOS",
-    platforms: [.iOS(.v9)],
+    platforms: [.iOS(.v15)],
     products: [
         .library(
             name: "Python-iOS",
@@ -15,10 +15,10 @@ let package = Package(
             ]),
     ],
     targets: [
-        .binaryTarget(name: "libpython3", url: "https://github.com/kewlbear/Python-iOS/releases/download/v0.1.1-b20230423-090254/libpython3.xcframework.zip", checksum: "fff9f3874a12b725ac3dce406658fc99e75d885cc4356a1f1637490f657ec816"),
-        .binaryTarget(name: "libssl", url: "https://github.com/kewlbear/Python-iOS/releases/download/v0.1.1-b20230423-090254/libssl.xcframework.zip", checksum: "e04b326f6779e567c5ba2f621f711762ddf7fb07f46eda5a5e70119836f5ca91"),
-        .binaryTarget(name: "libcrypto", url: "https://github.com/kewlbear/Python-iOS/releases/download/v0.1.1-b20230423-090254/libcrypto.xcframework.zip", checksum: "c0b46f250be2051b6f847c811d31f4ff742bb08a90fc8c266ef61ec48293a3db"),
-        .binaryTarget(name: "libffi", url: "https://github.com/kewlbear/Python-iOS/releases/download/v0.1.1-b20230423-090254/libffi.xcframework.zip", checksum: "c1ec3fe8a047b88809c74aba048737a3d05f86d61e061fcccfe970c872dbe6e5"),
+        .binaryTarget(name: "libpython3", url: "https://github.com/vince-hz/Python-iOS/releases/download/3.11.18-1/libpython3.xcframework.zip", checksum: "9d03d2fe865a890f60e095ad9ea4b432191adcff042a66372477e3a359a64369"),
+        .binaryTarget(name: "libssl", url: "https://github.com/vince-hz/Python-iOS/releases/download/3.11.18-1/libssl.xcframework.zip", checksum: "98046521a6de1f1a7a463d1021415672b2cad5e19d8108d8021abc12276bb93d"),
+        .binaryTarget(name: "libcrypto", url: "https://github.com/vince-hz/Python-iOS/releases/download/3.11.18-1/libcrypto.xcframework.zip", checksum: "5b8d6ba865a97ffd4b85b223014d23931ae89328b43d826eef5a7b085a7d86af"),
+        .binaryTarget(name: "libffi", url: "https://github.com/vince-hz/Python-iOS/releases/download/3.11.18-1/libffi.xcframework.zip", checksum: "cdbc800e726e24a7cdc94d5dccae0150ba685953cf03f93b1a2060842dd5c440"),
         .target(name: "LinkPython",
                 dependencies: [
                     "libpython3",
@@ -28,6 +28,7 @@ let package = Package(
                 ],
                 linkerSettings: [
                     .linkedLibrary("z"),
+                    .linkedLibrary("bz2"),
                     .linkedLibrary("sqlite3"),
                 ]
         ),

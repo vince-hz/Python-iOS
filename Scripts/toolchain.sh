@@ -1,27 +1,21 @@
-git clone --depth 1 https://github.com/kewlbear/kivy-ios.git
+#!/bin/sh
+set -eu
+cd "$(dirname "$0")/.."
+KIVY_REVISION=fd363d49eddb5ac06766348738bd89c7d46007f8
+if [ ! -d kivy-ios/.git ]; then
+    git clone https://github.com/kivy/kivy-ios.git kivy-ios
+fi
+git -C kivy-ios checkout "$KIVY_REVISION"
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install -e ./kivy-ios 'Cython==0.29.37'
+# Pin both interpreters: the host interpreter generates target bytecode.
+python Scripts/prepare-toolchain.py
 cd kivy-ios
-
-python3 -m venv venv
-. venv/bin/activate
-
-pip install -e .
-pip install cython==0.29.33
-
-python toolchain.py build python3
-
-for f in dist/frameworks/*.xcframework
-do
-	otool -l $f/ios-arm64/lib*.a | grep __LLVM >/dev/null
-	if [ $? ]
-	then
-		echo "$(basename $f) contains bitcode"
-	else
-		echo "$(basename $f) does NOT contain bitcode"
-	fi
-done
-
-mv dist/frameworks/lib* .
-mv libpython3.xcframework dist/frameworks
-
-rm -rf ../Sources/PythonSupport/lib
-mv dist/root/python3/lib ../Sources/PythonSupport
+env -i HOME="$HOME" PATH="$PATH" TMPDIR="${TMPDIR:-/tmp}" \
+    DEVELOPER_DIR="$(xcode-select -p)" \
+    python toolchain.py build hostpython3 python3 \
+    --platform iphoneos-arm64 \
+    --platform iphonesimulator-arm64 \
+    --platform iphonesimulator-x86_64 \
+    --concurrency 8

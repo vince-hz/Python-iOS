@@ -1,18 +1,20 @@
-TAG=$1
-
-cd kivy-ios
-
-sed s/TAG/$TAG/g ../Package.swift.in > Package.swift
-
-rm *.zip
-
-for f in *.xcframework
-do
-	zip -r $f.zip $f
-	rm Package.swift.in
-	mv Package.swift Package.swift.in
-	sed s/"$f"_CHECKSUM/`swift package compute-checksum $f.zip`/ Package.swift.in > Package.swift
+#!/bin/sh
+set -eu
+cd "$(dirname "$0")/.."
+TAG=${1:?Usage: package.sh RELEASE_TAG}
+export TAG
+for name in libpython3 libssl libcrypto libffi; do
+    rm -f "artifacts/$name.xcframework.zip"
+    (cd artifacts && zip -qry "$name.xcframework.zip" "$name.xcframework")
 done
+python3 - <<'PY'
+import hashlib
+import os
+from pathlib import Path
 
-rm ../Package.swift
-mv Package.swift ..
+manifest = Path('Package.swift.in').read_text().replace('TAG', os.environ['TAG'])
+for name in ('libpython3', 'libssl', 'libcrypto', 'libffi'):
+    checksum = hashlib.sha256(Path(f'artifacts/{name}.xcframework.zip').read_bytes()).hexdigest()
+    manifest = manifest.replace(f'{name}.xcframework_CHECKSUM', checksum)
+Path('Package.swift').write_text(manifest)
+PY

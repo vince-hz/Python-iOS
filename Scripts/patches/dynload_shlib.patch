@@ -1,0 +1,18 @@
+--- a/Python/dynload_shlib.c
++++ b/Python/dynload_shlib.c
+@@ -68,6 +68,9 @@
+ 
+     PyOS_snprintf(funcname, sizeof(funcname),
+                   LEAD_UNDERSCORE "%.20s_%.200s", prefix, shortname);
++    /* iOS extensions are statically linked into the executable. */
++    return (dl_funcptr) dlsym(RTLD_SELF, funcname);
++#if 0
+ 
+     if (fp != NULL) {
+         struct _Py_stat_struct status;
+@@ -108,4 +111,5 @@
+     }
+     p = (dl_funcptr) dlsym(handle, funcname);
+     return p;
++#endif
+ }
